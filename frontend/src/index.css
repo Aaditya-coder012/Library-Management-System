@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { background-color: #f6f2e9; scroll-behavior: smooth; }
+  body {
+    @apply bg-parchment text-ink font-sans antialiased;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(28,26,23,0.055) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+  ::selection { background: #a8823c; color: #f6f2e9; }
+  * { @apply transition-colors duration-150; }
+}
+
+@layer components {
+
+  /* ── Cards ─────────────────────────────────────────────────── */
+  .card {
+    @apply bg-[#fdfaf5] border border-ink/[0.08] rounded-lg;
+    box-shadow: 0 1px 3px rgba(28,26,23,0.07), 0 4px 16px rgba(28,26,23,0.04);
+  }
+  .card-hover {
+    @apply card transition-all duration-200 hover:-translate-y-0.5;
+  }
+  .card-hover:hover {
+    box-shadow: 0 4px 12px rgba(28,26,23,0.1), 0 12px 36px rgba(28,26,23,0.07);
+  }
+
+  /* ── Badges / stamps ────────────────────────────────────────── */
+  .stamp {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[10.5px] font-mono uppercase tracking-wider rounded-full border font-medium;
+  }
+  .badge-moss  { @apply bg-moss-50  border-moss-100  text-moss  stamp; }
+  .badge-rust  { @apply bg-rust-50  border-rust-100  text-rust  stamp; }
+  .badge-slate { @apply bg-slate-50 border-slate-100 text-slate stamp; }
+  .badge-brass { @apply bg-brass-50 border-brass-100 text-brass stamp; }
+
+  /* ── Buttons ────────────────────────────────────────────────── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-ink text-parchment px-4 py-2 rounded-lg text-sm font-medium tracking-wide
+           hover:bg-brass active:scale-[0.98]
+           transition-all duration-150 shadow-sm;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-parchment border border-ink/20 text-ink px-4 py-2 rounded-lg text-sm font-medium
+           hover:border-ink/40 hover:bg-ink/5 active:scale-[0.98]
+           transition-all duration-150;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-ink/60
+           hover:text-ink hover:bg-ink/5 transition-all duration-150;
+  }
+
+  /* ── Inputs ─────────────────────────────────────────────────── */
+  .input {
+    @apply w-full bg-white/70 border border-ink/15 rounded-lg px-3 py-2.5 text-sm
+           focus:outline-none focus:ring-2 focus:ring-brass/30 focus:border-brass
+           placeholder:text-ink/35 transition-all duration-150;
+  }
+  .input-label {
+    @apply block text-[11px] font-mono uppercase tracking-wider text-ink/50 mb-1.5 font-medium;
+  }
+
+  /* ── Table ──────────────────────────────────────────────────── */
+  .th-ledger {
+    @apply text-left text-[10.5px] font-mono uppercase tracking-widest text-ink/40
+           font-medium py-3 px-4 border-b border-ink/[0.07] bg-ink/[0.015];
+  }
+  .td-ledger {
+    @apply py-3 px-4 text-sm border-b border-ink/[0.05];
+  }
+  .tr-hover {
+    @apply hover:bg-brass/[0.04] transition-colors duration-100 cursor-default;
+  }
+  .tr-overdue {
+    @apply bg-rust/[0.05] hover:bg-rust/[0.09];
+  }
+
+  /* ── Skeleton loaders ───────────────────────────────────────── */
+  .skeleton {
+    @apply rounded-md overflow-hidden relative;
+    background: linear-gradient(90deg,
+      rgba(28,26,23,0.07) 25%,
+      rgba(28,26,23,0.12) 50%,
+      rgba(28,26,23,0.07) 75%);
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+  }
+
+  /* ── Section header ─────────────────────────────────────────── */
+  .section-header {
+    @apply flex items-center justify-between px-5 py-4 border-b border-ink/[0.07];
+  }
+
+  /* ── Divider ─────────────────────────────────────────────────── */
+  .divider {
+    @apply border-t border-ink/[0.07] my-4;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+}
