@@ -34,9 +34,9 @@ router.get("/stats", async (req, res) => {
 
     const recent = recentRaw.map((t) => ({
       id: t._id,
-      first_name: t.member_id?.first_name,
-      last_name: t.member_id?.last_name,
-      book_title: t.book_id?.title,
+      first_name: t.member_id?.first_name || "Unknown",
+      last_name: t.member_id?.last_name || "",
+      book_title: t.book_id?.title || "Unknown Book",
       due_date: t.due_date,
       status: t.status,
       display_status: t.status === "Issued" && t.due_date < today ? "Overdue" : t.status,
@@ -137,10 +137,10 @@ router.get("/fines", async (req, res) => {
       }
       return {
         id: r._id,
-        first_name: r.member_id?.first_name,
-        last_name: r.member_id?.last_name,
-        member_code: r.member_id?.member_code,
-        book_title: r.book_id?.title,
+        first_name: r.member_id?.first_name || "Unknown",
+        last_name: r.member_id?.last_name || "",
+        member_code: r.member_id?.member_code || "N/A",
+        book_title: r.book_id?.title || "Unknown Book",
         due_date: r.due_date,
         return_date: r.return_date,
         fine_amount: r.fine_amount,

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../App.jsx";
+import { api } from "../api.js";
 
 function BrandPanel() {
   return (
@@ -62,13 +63,7 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Login failed");
+      const data = await api.login(form);
       login(data.token, data.user);
       navigate("/", { replace: true });
     } catch (err) {
