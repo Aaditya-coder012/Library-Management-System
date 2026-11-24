@@ -9,6 +9,7 @@ import Fines from "./pages/Fines.jsx";
 import Reports from "./pages/Reports.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
+import { api } from "./api.js";
 
 // ── Toast ──────────────────────────────────────────────────────────────────
 const ToastContext = createContext(() => {});
@@ -64,9 +65,8 @@ export default function App() {
   useEffect(() => {
     const token = localStorage.getItem("lms_token");
     if (!token) return;
-    fetch("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
-      .then((r) => { if (!r.ok) logout(); })
-      .catch(() => {});
+    api.getMe()
+      .catch(() => logout());
   }, [logout]);
 
   // ── Toasts ─────────────────────────────────────────────────

@@ -1,7 +1,7 @@
 // seed.js — populates MongoDB with sample books, members, transactions, and admin user
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
-const { connectDB } = require("./db");
+const { connectDB, mongoose } = require("./db");
 const Book = require("./models/Book");
 const Member = require("./models/Member");
 const Transaction = require("./models/Transaction");
@@ -166,10 +166,14 @@ async function seed() {
   }
 
   console.log(`Seeded ${bookDocs.length} books, ${memberDocs.length} members, ${scenarios.length} transactions.`);
+  await mongoose.connection.close();
   process.exit(0);
 }
 
-seed().catch((err) => {
+seed().catch(async (err) => {
   console.error("Seed failed:", err);
+  try {
+    await mongoose.connection.close();
+  } catch (_) {}
   process.exit(1);
 });

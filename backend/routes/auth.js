@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 const User = require("../models/User");
 
 const router = express.Router();
@@ -16,12 +17,13 @@ router.post("/register", async (req, res) => {
     return res.status(400).json({ error: "Password must be at least 6 characters" });
 
   try {
-    const existing = await User.findOne({ email: email.toLowerCase().trim() });
+    const normalizedEmail = email.toLowerCase().trim();
+    const existing = await User.findOne({ email: normalizedEmail });
     if (existing)
       return res.status(409).json({ error: "An account with that email already exists" });
 
     const hashed = await bcrypt.hash(password, 10);
-    const user = await User.create({ name: name.trim(), email: email.toLowerCase().trim(), password: hashed });
+    const user = await User.create({ name: name.trim(), email: normalizedEmail, password: hashed });
 
     const { password: _pw, ...safeUser } = user.toObject();
     const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: JWT_EXPIRES });
@@ -39,7 +41,8 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({ error: "email and password are required" });
 
   try {
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    const normalizedEmail = email.toLowerCase().trim();
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user)
       return res.status(401).json({ error: "Invalid email or password" });
 
@@ -60,9 +63,12 @@ router.post("/login", async (req, res) => {
 router.get("/me", async (req, res) => {
   const header = req.headers.authorization || "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : null;
-  if (!token) return res.status(401).json({ error: "No token" });
+  if (!token) return res.status(401).json({ error: "No token provided" });
   try {
     const payload = jwt.verify(token, JWT_SECRET);
+    if (!payload || !payload.id || !mongoose.Types.ObjectId.isValid(payload.id)) {
+      return res.status(401).json({ error: "Invalid token payload" });
+    }
     const user = await User.findById(payload.id).select("-password").lean();
     if (!user) return res.status(401).json({ error: "User not found" });
     res.json({ user });

@@ -1,9 +1,10 @@
 node_modules/
 dist/
 *.log
+.env
+.env.*
 *.env
 !.env.example
-backend/library.db
-backend/library.db-journal
-backend/library.db-wal
-backend/library.db-shm
+!backend/.env.example
+.DS_Store
+Thumbs.db

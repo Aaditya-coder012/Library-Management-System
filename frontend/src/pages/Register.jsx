@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../App.jsx";
+import { api } from "../api.js";
 
 function BrandPanel() {
   return (
@@ -60,13 +61,7 @@ export default function Register() {
     if (form.password.length < 6) { setError("Password must be at least 6 characters"); return; }
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: form.name, email: form.email, password: form.password }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Registration failed");
+      const data = await api.register({ name: form.name, email: form.email, password: form.password });
       login(data.token, data.user);
       navigate("/", { replace: true });
     } catch (err) {
